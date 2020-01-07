@@ -1,4 +1,5 @@
 # Mayu-notifier
+[![Build Status](https://travis-ci.org/heartxland/mayu-notifier.svg?branch=master)](https://travis-ci.org/heartxland/mayu-notifier)<br>
 色々教えてくれる佐久間まゆさんのSlackBot。
 
 # 一体何を教えてくれると言うんです？
