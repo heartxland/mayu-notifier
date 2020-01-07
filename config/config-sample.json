@@ -1,0 +1,6 @@
+{
+    "slackParams": {
+        "userAccessToken": "XXXXXXXXXX",
+        "botAccessToken": "XXXXXXXXXX"
+    }
+}
