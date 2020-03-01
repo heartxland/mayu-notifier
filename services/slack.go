@@ -4,6 +4,9 @@ import (
 	"encoding/json"
 	"fmt"
 	"io/ioutil"
+	"math/rand"
+	"strings"
+	"time"
 
 	"github.com/nlopes/slack"
 )
@@ -19,13 +22,12 @@ type (
 		UserAccessToken string
 		BotAccessToken  string
 	}
-	// Lines ：セリフ配列構造体
-	Lines struct {
-		LineData LineData
-	}
 
-	// LineData ：セリフ詳細
 	LineData struct {
+		Lines Lines
+	}
+	// Lines ：セリフ配列構造体
+	Lines []struct {
 		Line  string
 		Scene string
 		Kind  string
@@ -46,8 +48,8 @@ func Init(slackConfigBuf []byte) error {
 		return lineReadErr
 	}
 
-	var lines Lines
-	lineConvertErr := ReadJsonOnStruct(lineBuf, &lines)
+	var lineData LineData
+	lineConvertErr := ReadJsonOnStruct(lineBuf, &lineData)
 	if lineConvertErr != nil {
 		fmt.Println(lineConvertErr)
 		return lineConvertErr
@@ -60,14 +62,17 @@ func Init(slackConfigBuf []byte) error {
 	for msg := range rtm.IncomingEvents {
 		switch ev := msg.Data.(type) {
 		case *slack.MessageEvent:
-			rtm.SendMessage(rtm.NewOutgoingMessage("まゆですよぉ", ev.Channel))
+			rand.Seed(time.Now().UnixNano())
+			say := lineData.Lines[rand.Intn(len(lineData.Lines)-1)].Line
+			say = strings.Replace(say, "○○", "デスピサロ先輩", -1)
+			rtm.SendMessage(rtm.NewOutgoingMessage(say, ev.Channel))
 		}
 	}
 	return nil
 }
 
 // ReadJsonOnStruct ：コンフィグファイルの内容を構造体に格納する
-func ReadJsonOnStruct(buf []byte, target interface{}) error {
+func ReadJSONOnStruct(buf []byte, target interface{}) error {
 	err := json.Unmarshal(buf, &target)
 	if err != nil {
 		return err
