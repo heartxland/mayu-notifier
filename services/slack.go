@@ -36,7 +36,7 @@ type (
 
 func Init(slackConfigBuf []byte) error {
 	var config Config
-	convertErr := ReadJsonOnStruct(slackConfigBuf, &config)
+	convertErr := ReadJSONOnStruct(slackConfigBuf, &config)
 	if convertErr != nil {
 		fmt.Println(convertErr)
 		return convertErr
@@ -49,7 +49,7 @@ func Init(slackConfigBuf []byte) error {
 	}
 
 	var lineData LineData
-	lineConvertErr := ReadJsonOnStruct(lineBuf, &lineData)
+	lineConvertErr := ReadJSONOnStruct(lineBuf, &lineData)
 	if lineConvertErr != nil {
 		fmt.Println(lineConvertErr)
 		return lineConvertErr
